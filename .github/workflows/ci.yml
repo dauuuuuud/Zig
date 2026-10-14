@@ -124,6 +124,16 @@ jobs:
         shell: bash
         run: ls -lhR zig-out/
 
+      # ✅ NEW: Upload build artifacts
+      - name: Upload build artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-${{ matrix.name }}
+          path: zig-out/
+          retention-days: 30
+          if-no-files-found: warn
+
       - name: Run tests
         if: matrix.test
         run: zig build test --release=fast --summary all
